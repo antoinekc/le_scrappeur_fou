@@ -29,7 +29,6 @@ doc = Nokogiri::HTML(URI.open(url))
     townhalls_infos[townhall_name] ||= 0
     townhalls_infos[townhall_name] = email_link
 
-
   end
 
 townhalls_infos.each do | townhall_name, townhall_mail |
@@ -38,9 +37,37 @@ townhalls_infos.each do | townhall_name, townhall_mail |
 end
 
 
-#result['ta_key'] = 'ta_value'
 
-=begin
-faire un array avec le noms des villes
-faire un array avec les emails
-=end
+doc = Nokogiri::HTML(URI.open("https://www.aude.fr/annuaire-mairies-du-departement"))
+
+mairies_page = doc.xpath("//article[@class='directory-block__item']")
+
+hash = {}
+
+mairies_page.each do |block|
+    ville = block.at("h2.directory-block__title").text
+    mail = block.at("p.-email a").text
+    hash[ville] = mail
+end
+
+
+hash.each do |ville, mail|
+  puts "#{ville} => #{mail}"
+end
+
+town_urls = []
+town_names = []
+
+directory.each do | town |
+  town_names = town.at("h2.composite-link__title").text  
+  town_url = town.at_("p.-email a").text  #je relance mon ordi car discord marche plus
+
+  town_urls[town_names] = town_url
+end
+
+town_urls do |town_names , town_url |
+  puts "#{ville} ==> #{town_url}"
+end
+
+end
+
